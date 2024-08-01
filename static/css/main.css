@@ -1,0 +1,958 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700);
+a {
+    color: inherit;
+    text-decoration: none;
+}
+body {
+    background-color: #f8f8f8;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+.material-icons {
+    vertical-align: middle;
+}
+#main_box {
+    position: relative;
+    margin-left: 250px;
+}
+#main_header {
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    background: white;
+    box-sizing: border-box;
+    height: 43px;
+}
+#main_container, #review_main_container {
+    outline: none;
+    min-height: calc(100% - 40px);
+    padding-left: calc((100% - 1000px)/2 + 50px);
+    padding-right: calc((100% - 1000px)/2 + 50px);
+    padding-top: 70px; /* To accomodate for the header height */
+    background: white;
+    line-height: 1.8;
+    font-size: 18px;
+}
+
+@media (max-width: 1450px) {
+    #main_container, #review_main_container {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}
+
+.demo_mode #main_container, .demo_mode #review_main_container {
+    padding: 20px;
+    padding-top: 60px;
+}
+#review_main_container {
+    background: repeating-linear-gradient(-45deg,#f9f9f9, #f9f9f9 40px, white 40px, white 80px);
+    background-repeat: repeat;
+}
+.no_menu #main_box {
+    margin-left: 0px;
+}
+#main_box, #main_header {
+    width: calc(100% - 500px);
+}
+.no_menu #main_box, .no_menu #main_header {
+    width: calc(100% - 250px);
+}
+.demo_mode #main_box, .demo_mode #main_header {
+    width: calc(100% - 360px);
+}
+.suggestion {
+    border-bottom-width: 2px;
+    cursor: pointer;
+    position: relative;
+}
+.suggestion_rephrasing {
+    border-bottom-color: #12a683;
+    border-bottom-style: solid;
+}
+.suggestion_typo {
+    border-bottom-color: #e31e3e;
+    border-bottom-style: dashed;
+}
+.suggestion:hover {
+    border-bottom-width: 3px;
+}
+.no_show {
+    display: none;
+}
+.suggestion:hover .no_show {
+    display: block;
+}
+.suggestion .hover_box {
+    position: absolute;
+    z-index: 2;
+    top: 20px; left: 0px;
+    background: #fbfbfb;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.08);
+}
+.hover_box_small {
+    width: 150px;
+}
+.hover_box_medium {
+    width: 300px;
+}
+.hover_box .invis_connector {
+    position: absolute;
+    top: -10px;
+    background: transparent;
+    width: 100%;
+    height: 10px;
+}
+.hover_box_row {
+    padding: 10px;
+}
+.hover_box_row:hover {
+    background: #f5f5f5;
+}
+.hover_box_warning_row:hover {
+    background: transparent;
+}
+.explanation_delete, .explanation_insert {
+    margin: 0px 3px;
+    /* font-size: 15px; */
+}
+.explanation_delete {
+    text-decoration: line-through;
+    color: rgb(227, 30, 62);
+}
+.explanation_insert {
+    color: rgb(18, 166, 131);
+}
+.accept_subtext {
+    margin-top: 10px;
+}
+.hover_box_accept_row {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.hover_reject_row {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.hover_reject_row, .accept_subtext, .hover_verify_row {
+    color: #999;
+    font-weight: 300;
+    font-size: 12px;
+    text-align: center;
+}
+.hover_reject_row .material-icons, .accept_subtext .material-icons, .hover_verify_row .material-icons {
+    font-size: 16px;
+    vertical-align: middle;
+    padding-right: 2px;
+}
+.hover_box_warning_row {
+    text-align: center;
+    font-size: 12px;
+}
+.warning_level_1 {
+    /* orange color */
+    color: rgb(245, 166, 35);
+}
+.warning_level_2 {
+    /* red color */
+    color: rgb(227, 30, 62);
+}
+.warning_level_0 {
+    /* Green */
+    color: rgb(18, 166, 131);
+}
+#main_spinner {
+    position: absolute;
+    top: 10px; right: 10px;
+    display: none;
+}
+#markers_countdown {
+    position: absolute;
+    top: 6px; right: 10px;
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+    font-family: "Roboto Condensed";
+    display: none;
+}
+#markers_countdown .line2 {
+    font-weight: 100;
+}
+.chat_spinner {
+    display: none;
+}
+#column_left {
+    position: fixed;
+    top: 0px; left: 0px;
+    width: 250px;
+    float: left;
+    background-color: #3f0f40;
+    height: calc(100vh);
+    overflow-y: auto;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    color: white;
+    font-size: 16px;
+}
+.demo_mode #column_left {
+    width: 110px;   
+}
+.demo_mode #main_box {
+    margin-left: 110px;
+}
+.no_menu #column_left {
+    display: none;
+}
+#logo {
+    padding: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: "Roboto Condensed";
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid #ccc;
+}
+.left_panel_button {
+    width: calc(100% - 20px);
+    margin: 10px;
+    border: 1px solid #fff;
+    padding: 4px 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#review_btn, #close_review_btn {
+    position: absolute;
+    bottom: 10px;
+}
+.left_panel_button:hover {
+    background: rgba(255,255,255,0.1);
+}
+.left_panel_button_disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.left_panel_button_disabled:hover {
+    background: transparent;
+}
+#document_list {
+    /* scrolly */
+    position: relative;
+    overflow-y: auto;
+    height: calc(100% - 80px);
+}
+.delete_doc_icon {
+    font-size: 14px;
+    float: right;
+    vertical-align: middle;
+    color: #e0e0e0;
+    display: none;
+}
+.active_document_item .delete_doc_icon {
+    display: block;
+}
+.delete_doc_icon:hover {
+    color: white;
+}
+#column_right {
+    width: 250px;
+    position: fixed;
+    top: 0px; right: 0px;
+    border-left: 1px solid #ccc;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.header {
+    padding: 10px 10px;
+    height: 23px;
+    font-weight: 300;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+}
+.header .material-icons {
+    font-size: 16px;
+}
+.document_item {
+    padding: 6px 8px;
+    margin: 4px 4px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #e0e0e0;
+    font-family: "Roboto Condensed";
+    font-weight: 300;
+}
+.active_document_item {
+    background-color: rgb(16, 100, 163);
+    border-radius: 10px;
+}
+#document_name_input {
+    border: 0px;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 2px 7px;
+    width: 210px;
+}
+#document_name_input:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #ccc;
+}
+/* Marker menu */
+.subheader {
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 5px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    transform: translateY(-1px);
+}
+.subheader .material-icons {
+    font-size: 16px;
+}
+.marker_item {
+    padding: 7px 5px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+}
+.marker_item:hover {
+    background: white;
+}
+.marker_item svg {
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+.marker_item .marker_name {
+    border: 0px;
+    border-bottom-width: 2px;
+    
+}
+.marker_item .edit_marker, .marker_item .focus_marker {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.edit_marker {
+    right: 5px;
+}
+.focus_marker {
+    right: 25px;
+}
+.edit_marker span {
+    font-size: 18px;
+    color: #999;
+}
+.focus_marker span {
+    font-size: 14px;
+    border-radius: 50%;
+    padding: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.focus_marker span:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+#marker_add {
+    font-weight: 300;
+    color: #999;
+}
+#marker_form_container {
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%; height: 100%;
+    position: fixed;
+    top: 0px; left: 0px;
+    z-index: 6;
+    display: none;
+}
+#marker_form {
+    width: 700px;
+    min-height: 400px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    box-sizing: border-box;
+    padding: 20px;
+}
+#marker_form .close {
+    position: absolute;
+    right: 20px; top: 20px;
+    font-size: 32px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+#marker_form .form_row {
+    margin: 10px 0px;
+}
+#marker_form .input_description {
+    font-size: 16px;
+    display: block;
+    padding: 5px 0px;
+}
+#marker_form input, #marker_form textarea, #marker_form select {
+    width: 400px;
+    background: #f0f0f0;
+    border: 0px;
+    padding: 7px;
+    font-family: "Roboto Condensed";
+}
+#marker_form input[type='color'] {
+    padding: 2px 7px;
+    width: 250px;
+}
+#marker_form textarea {
+    height: 100px;
+}
+#marker_save_btn, #marker_del_btn {
+    background: #12a683;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+    float: right;
+    color: white;
+    font-weight: bold;
+}
+#marker_del_btn {
+    background: #a9132c;
+    float: left;
+}
+#marker_form .explanation {
+    font-size: 12px;
+    color: #999;
+    font-weight: 300;
+    padding-top: 5px;
+}
+#col_right_header {
+    flex: 0 0 auto;
+}
+#marker_container {
+    flex: 0 0 auto;
+}
+#tabs_container {
+    flex: 1 1 auto;
+    position: relative;
+}
+#chat_messages, #comment_chat_content {
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    height: calc(100% - 110px);
+    position: absolute;
+    left: 0px;
+    width: 100%;
+}
+#verify_content {
+    overflow-y: auto;
+    box-sizing: border-box;
+    width: 100%; height: 100%;
+    position: absolute;
+    height: calc(100% - 95px);
+    left: 0px;
+}
+.msg_send_container, #verify_buttons {
+    bottom: 0px; left: 0px;
+    position: absolute;
+    width: 100%;
+    height: 50px;
+}
+.msg_send_container {
+    border-top: 1px solid #ccc;
+}
+.chat_input {
+    font-family: "Roboto Condensed";
+    width: calc(100% - 44px);
+    padding: 10px 20px;
+    font-size: 15px;
+    height: 50px;
+    border: 0px;
+    resize: none;
+}
+.chat_send_btn {
+    background: #12a683;
+    line-height: 50px;
+    height: 50px;
+    border: 0px;
+    width: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+.chat_message_row {
+    padding: 3px 10px;
+    position: relative;
+    overflow: hidden;
+}
+.chat_message {
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    max-width: 80%;
+    font-size: 15px;
+    font-family: "Roboto Condensed";
+    font-weight: 300;
+}
+.chat_assistant {
+    background: #f0f0f0;
+}
+.chat_user {
+    background: #12a683;
+    color: white;
+    float: right;
+}
+.chat_system {
+    font-size: 12px;
+    color: #999;
+}
+.chat_message_icon {
+    font-size: 12px;
+    vertical-align: middle;
+    padding-right: 3px;
+}
+
+/* Checkbox */
+.checkbox {
+    float: right;
+    margin-right: 10px;
+}
+.checkbox .switch {
+    display: inline-block;
+    height: 18px;
+    position: relative;
+    width: 36px;
+}
+.checkbox .switch input {
+    display:none;
+}
+.checkbox .slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+.checkbox .slider:before {
+    background-color: #fff;
+    bottom: 2px;
+    content: "";
+    left: 2px;
+    position: absolute;
+    transition: .4s;
+    width: 14px;
+    height: 14px;
+}
+.checkbox input:checked + .slider {
+    background-color: #12a683;
+}
+.checkbox input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+.checkbox .slider.round {
+    border-radius: 34px;
+}
+.checkbox .slider.round:before {
+    border-radius: 50%;
+}
+
+#view_type {
+    font-weight: 300;
+}
+.inline_hidden, .inline_mode .inline_visible {
+    display: inline;
+}
+.inline_visible, .inline_mode .inline_hidden {
+    display: none;
+}
+
+.chat_actions {
+    font-size: 12px;
+    font-weight: 300;
+    font-family: "Roboto Condensed";
+    margin-top: 10px;
+}
+.chat_actions svg {
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+.chat_action {
+    cursor: pointer;
+    padding: 0px 1px;
+
+    text-decoration: underline;
+}
+.chat_retry_row {
+    padding-top: 8px;
+    /* padding-left: 10px; */
+}
+.chat_retry_row .chat_message_icon {
+    font-size: 18px;
+    cursor: pointer;
+}
+.marker_visibility {
+    font-size: 16px;
+    font-weight: 300;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.subheader .marker_visibility {
+    margin-left: 0px;
+}
+.marker_hidden {
+    opacity: 0.3;
+}
+.marker_num_suggestions {
+    font-size: 10px;
+    font-weight: 900;
+    margin-left: 5px;
+    /* Make it supscript */
+    position: relative;
+    top: -4px;
+}
+.tab {
+    display: inline-block;
+    margin: 0px 5px;
+    cursor: pointer;
+    color: #999;
+}
+.tab_content {
+    display: none;
+}
+.active_tab {
+    color: black;
+    border-bottom: 2px solid black;
+}
+#hover_button {
+    position: absolute;
+    top: 100px; left: 300px;
+    color: white;
+    padding: 4px 5px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: none;
+    z-index: 4;
+    transform: translate(-50%, 0%);
+}
+#hover_button span.material-icons {
+    font-size: 18px;
+}
+#hover_button.loading #hover_icons {
+    display: none;
+}
+#brainstorm_content {
+    display: none;
+}
+/* When hover_button is .loaded, should animate to width 300px and show brainstorm_content */
+#brainstorm_content {
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.28);
+    position: absolute;
+    left: 50%; top: 24px;
+    transform: translateX(-50%);
+    width: 300px;
+    transition: width 0.5s;
+    background: white;
+    color: black;
+    padding-top: 20px;
+    z-index: 10;
+}
+#brainstorm_span {
+    position: relative;
+}
+.loaded_brainstorm #brainstorm_content {
+    display: block;
+}
+.hover_icon {
+    background: #12a683;
+    padding: 4px 7px;
+}
+.hover_icon:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.hover_icon:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.hover_icon:hover {
+    background: #0b735b;
+}
+#close_brainstorm {
+    position: absolute;
+    right: 5px; top: 2px;
+    font-size: 24px;
+    cursor: pointer;
+}
+#brainstorm_suggestions {
+    padding-top: 10px;
+}
+.brainstorm_suggestion {
+    padding: 4px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.brainstorm_suggestion:hover {
+    background: #f5f5f5;
+}
+.hidden_brainstorm {
+    background: transparent !important;
+}
+
+@keyframes brainstorm-animation {
+    0% {
+      background-position: 0 110%, 0px 110%;
+    }
+    50% {
+      background-position: 10000px 110%, -10000px 110%;
+    }
+    100% {
+      background-position: 0 110%, 0px 110%;
+    }
+  }
+.loading_brainstorm {
+    background: linear-gradient(90deg, black 15px, transparent 0 calc(100% - 15px), black 0),
+        linear-gradient(90deg, black 15px, transparent 0 calc(100% - 15px), black 0);
+    background-size: 100% 3px;
+    background-repeat: repeat-x;
+    background-position: 0 110%, 0px 110%;
+    animation: brainstorm-animation 120s linear infinite;
+    transition: 60s linear;
+}
+
+.loaded_brainstorm {
+    background: linear-gradient(90deg, black, black);
+    background-size: 110% 3px;
+    background-position: 0 110%, 0px 110%;
+    background-repeat: repeat-x;
+    animation: none; /* Disable hover animation */
+    transition: 99999s linear;
+}
+#comment_explainer, .comment_no_message, #verify_explainer {
+    padding: 10px 30px;
+    text-align: center;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #666;
+}
+#comment_explainer span, #verify_explainer span {
+    font-size: 13px;
+}
+.comment_span {
+    /* Dark yellow */
+    background: rgb(254, 241, 216);
+    border-top: 1px dashed #ffc848;
+    border-bottom: 1px dashed #ffc848;
+    padding: 3px 0px;
+    cursor: pointer;
+}
+.comment_span:hover, .active_comment {
+    background: #ffe7bb;
+}
+.active_comment {
+    border-width: 2px;
+}
+.comment_actions {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.comment_archive {
+    cursor: pointer;
+    padding: 5px 10px;
+    background: #eb7198;
+    color: white;
+    border-radius: 5px;
+    font-family: "Roboto Condensed";
+    
+}
+.comment_archive:hover {
+    background: #e01c5a;
+}
+.comment_archive .material-icons {
+    font-size: 16px;
+    vertical-align: middle;
+}
+#verify_loading {
+    text-align: center;
+    display: none;
+}
+#verify_spinner {
+    margin-top: 10px;
+}
+.verify_query {
+    padding: 10px;
+    font-family: "Roboto Condensed";
+}
+.verify_query span {
+    font-size: 16px;
+}
+.verify_query:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+.verif_query_visited {
+    color: #999;
+}
+.verify_content_intro {
+    padding: 10px;
+    font-family: "Roboto Condensed";
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+.verify_buttons {
+    position: absolute;
+    bottom: 0px; left: 0px;
+    width: 100%;
+    display: flex;      /* Use flexbox */
+    justify-content: space-between; /* Distribute buttons evenly along the container */  
+    border-top: 1px solid #ccc;
+    background: white;
+}
+.quick_verify_buttons {
+    display: flex;      /* Use flexbox */
+    justify-content: space-between; /* Distribute buttons evenly along the container */  
+}
+/* Each button should be 1/3 the width */
+.verify_button {
+    cursor: pointer;
+    flex: 1;           /* Allow buttons to flex and take equal width */
+    text-align: center;
+    padding: 8px 0px;
+    font-weight: bold;
+}
+.verify_button:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+#verify_buttons .verify_button span {
+    font-size: 16px;
+    display: block;
+}
+.verify_button_verified {
+    color: rgb(18, 166, 131);
+}
+.verify_button_incorrect {
+    color: rgb(227, 30, 62);
+}
+.verify_button_not_sure {
+    color: rgb(102, 102, 102);
+}
+.verify_button_verified.active_verify_button {
+    background: rgba(18, 166, 131, 0.1) !important;
+}
+.verify_button_incorrect.active_verify_button {
+    background: rgba(227, 30, 62, 0.1) !important;
+}
+.verify_button_not_sure.active_verify_button {
+    background: rgba(102, 102, 102, 0.1) !important;
+}
+.review_mode .review_mode_hidden {
+    display: none;
+}
+.review_mode_visible {
+    display: none;
+}
+.review_mode .review_mode_visible {
+    display: block;
+}
+.review_mode .review_mode_inline {
+    display: inline;
+}
+.review_track {
+    cursor: pointer;
+}
+.severity_0 {
+    background: rgba(102, 102, 102, 0.2);
+    border-bottom: 1px solid rgba(102, 102, 102, 0.5);
+}
+.sug_severity_0 {
+    border-left-color: rgba(102, 102, 102, 0.5);
+}
+.severity_1 {
+    background: rgba(245, 166, 35, 0.2);
+    border-bottom: 1px solid rgba(245, 166, 35, 0.5);
+}
+.sug_severity_1 {
+    border-left-color: rgba(245, 166, 35, 0.5);
+}
+.severity_verified {
+    background: rgba(18, 166, 131, 0.2);
+    border-bottom: 0px solid rgba(18, 166, 131, 0.5);
+}
+.sug_severity_verified {
+    border-left-color: rgba(18, 166, 131, 0.5);
+}
+.severity_incorrect {
+    background: rgba(227, 30, 62, 0.2);
+}
+.sug_severity_incorrect {
+    border-left-color: rgba(227, 30, 62, 0.5);
+}
+.severity_not_sure {
+    background: rgba(212, 118, 47, 0.2);
+}
+.sug_severity_not_sure {
+    border-left-color: rgba(212, 118, 47, 0.5);
+}
+.sug_severity_deleted {
+    border-left-color: rgba(102, 102, 102, 0.5);
+    opacity: 0.5;
+}
+.active_track {
+    border-bottom-width: 3px;
+}
+#review_sug_list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.review_suggestion {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+.review_suggestion .suggestion_name {
+    font-family: "Roboto Condensed";
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.review_suggestion .explanation {
+    font-size: 11px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-line-clamp: 3;
+    -moz-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+}
+.active_review_sug {
+    background: rgba(0, 0, 0, 0.05);
+    border-left-width: 6px;
+}
+.legend_row {
+    padding-bottom: 5px;
+}
+.review_mode #verify_explainer {
+    padding: 10px 10px;
+    text-align: left;
+}
+.study_visible {
+    display: none;
+}

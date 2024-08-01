@@ -1,0 +1,8 @@
+flask
+flask-cors
+gunicorn
+pytz
+bson
+colorama
+openai
+bson

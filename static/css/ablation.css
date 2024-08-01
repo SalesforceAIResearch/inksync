@@ -1,0 +1,21 @@
+.no_markers #marker_container {
+    display: none;
+}
+.no_chat #chat_tab, .no_chat .tab_chat_content {
+    display: none !important;
+}
+.no_verify #review_btn, .no_verify #verify_tab, .no_verify .tab_verify_content {
+    display: none;
+}
+.no_verify .hover_verify_row, .no_verify .hover_box_warning_row {
+    display: none;
+}
+.no_local #comment_tab, .no_local .tab_comment_content, .no_local #hover_button {
+    display: none !important;
+}
+.no_local.no_verify.no_chat #tabs_container {
+    display: none;
+}
+.no_local.no_markers.no_chat #edit_view_mode_row {
+    display: none;
+}

@@ -1,0 +1,25 @@
+For the document above, suggest specific edits that could be implemented as a JSON object, following the format shown in the example.
+
+Example Document:
+```Elephants ae the largst terrestrial species.```
+Example Output:
+```
+{"edits": [{"type": "EXAMPLE_TYPE1", "source": "ae", "target": "are", "new_info": "no"},
+  {"type": "EXAMPLE_TYPE2", "source": "terrestrial species", "target": "animal living on land", "new_info": "yes"},
+  {"type": "EXAMPLE_TYPE1", "source": "largst", "target": "largest", "new_info": "no"}
+  ]}
+```
+
+The types of edits you should consider exclusively for this document are:
+[MARKERS]
+
+Output format:
+- Your output should be a JSON object that starts with {"edits": [...]} and contains a list of edits in the format shown above, each with a type, source, target, and new_info keys.
+- Careful: the `source` text should be exactly present in the document, otherwise the edit will be ignored.
+- Edits you suggest should be self-contained, for example: if replacing a preposition in "the sun shines on noon" to "at" you should suggest "on noon" -> "at noon" so it is self-explanatory.
+- For each edit, the `new_info` value can be 'yes' or 'no'. You should say 'yes' if the edit introduces any new information (such as a new term, or a new fact), and 'no' if the edit is purely structural (such as a spelling correction, or a rephrasing of a fact already in the document).
+
+Rules to follow:
+- Try to balance the edits by suggesting some in each type when possible.
+- You should choose the most appropriate edit type for each edit you propose, and use the description provided for each edit to decide on the type.
+- Your answer MUST START with: `{"edits":`

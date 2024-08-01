@@ -1,0 +1,308 @@
+<html>
+    <head>
+        <title>InkSync - Document Editing</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="/css/main.css" rel="stylesheet">
+        <link href="/css/intro.css" rel="stylesheet">
+        <link href="/css/ablation.css" rel="stylesheet">
+        <link href="/css/spinner.css" rel="stylesheet">
+    </head>
+    <body class="{{no_menu_class}} {{hidden_systems_class}}">
+        <div id="hover_button">
+            <div id="hover_icons">
+                <span class="material-icons hover_icon" onclick="start_brainstorm_click();">lightbulb</span><span class="material-icons hover_icon" onclick="start_comment_click();">rate_review</span>
+            </div>
+        </div>
+        <div id="marker_form_container" onclick="$('#marker_form_container').hide();">
+            <div id="marker_form" onclick="event.stopPropagation();">
+                <span class="close material-icons" onclick="$('#marker_form_container').hide();">close</span>
+                <div class="header">
+                    <span class="material-icons">edit_note</span>
+                    Marker Settings
+                </div>
+                <div class="form">
+                    <div class="form_row">
+                        <span class='input_description'>Marker Name:</span>
+                        <input type="text" id="marker_name_input" placeholder="Marker Name">
+                        <div class="explanation">
+                            Provide a name for the marker. Make it short but descriptive to help the system provide better suggestions.
+                        </div>
+                    </div>
+                    <div class="form_row">
+                        <span class='input_description'>Marker Color:</span>
+                        <input type="color" id="marker_color_input" value="#E31E3E">
+                    </div>
+                    <div class="form_row">
+                        <span class='input_description'>Marker Style:</span>
+                        <select id="marker_style_input">
+                            <option value="solid">Solid</option>
+                            <option value="dashed">Dashed</option>
+                        </select>
+                    </div>
+                    <div class="form_row">
+                        <span class='input_description'>Marker Description:</span>
+                        <textarea id="marker_description_input" placeholder="Write a description"></textarea>
+                        <div class="explanation">
+                            Optional: Providing a detailed description of the kind of suggestions you want to receive helps the system provide better suggestions. Provide examples edits you'd want to receive to inform the system of the type of suggestion you're looking for.
+                        </div>
+                    </div>
+                    <div class="form_row">
+                        <div id="marker_del_btn" onclick="delete_marker();">Delete Marker</div>
+                        <div id="marker_save_btn" onclick="save_marker();">Save Marker</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="column_left">
+            <a href="/">
+                <div id="logo">InkSync</div>
+            </a>
+            <div class="study_hidden">
+                <a href="/new_doc">
+                    <div id="new_document_btn" class="left_panel_button">
+                        <span class="material-icons">add</span>
+                        {{"New" if "demo_mode" in hidden_systems_class else "New Document"}}
+                    </div>
+                </a>
+                <div id="document_list">
+                    {% for doc in documents %}
+                        <a href="/doc/{{ doc.id}}">
+                            <div class="document_item_{{doc.id}} document_item {{'active_document_item' if doc.id==active_doc.id}}">
+                                <span>{{ doc.name }}</span>
+                                <!-- Add a trash icon on the right -->
+                                <a class="material-icons delete_doc_icon" href="/delete_doc/{{ doc.id}}">delete</a>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                {% if active_doc %}
+                <div id="review_btn" class="left_panel_button review_mode_hidden" onclick="start_review();">
+                    <span class="material-icons">crisis_alert</span>
+                    {{"Audit" if "demo_mode" in hidden_systems_class else "Audit Interface"}}
+                </div>
+                <div id="close_review_btn" class="left_panel_button review_mode_visible" onclick="start_review();">
+                    <span class="material-icons">arrow_back</span>
+                    Back to Editor
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div id="main_box">
+            {% if active_doc %}
+            <div id="main_header" class="header">
+                <span class="material-icons">description</span>
+                <input type="text" id="document_name_input" placeholder="Choose Document Name" value="{{active_doc.name}}" onchange="save_document_title('{{active_doc.id}}');">
+                <span class="review_mode_visible review_mode_inline">&mdash; Audit Mode</span>
+                <div id="markers_countdown">
+                    <div class="line1">Markers reload in <span id="countdown_nb">5</span> sec.</div>
+                    <div class="line2">ESC to cancel</div>
+                </div>
+                <svg id="main_spinner" class="spinner" width="24px" height="24px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                </svg>
+            </div>
+            <div id="main_container" contenteditable="true" data-gramm="false" spellcheck="false" autocomplete="off" class="review_mode_hidden"></div>
+            <div id="review_main_container" class="review_mode_visible"></div>
+            {% else %}
+                <div id="introduction_message">
+                    <div id="intro_header">Welcome to InkSync!</div>
+                    <div class="intro_paragraph">
+                        This is a research demo of the paper: <a href="https://arxiv.org/abs/2309.15337" target="_new">Beyond the Chat: Executable and Verifiable Text-Editing with LLMs</a>. Here's a 2-min video introducing InkSync's features:
+                    </div>
+                    <div id="intro_youtube">
+                        <iframe width="800" height="500" src="https://www.youtube.com/embed/q7lf5CIMyvE?si=l0dTAve38YUXDycW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="intro_paragraph">
+                        To get started, click on "<a href="/new_doc">+ New Document</a>" to create a new document.
+                    </div>
+                    <div class="intro_subheader">Data Retention</div>
+                    <div class="intro_paragraph">
+                        Since this is a research demo, we are logging data and interaction so we can analyze how people use InkSync, and understand how to improve it.<br />
+                        If you would a document to be excluded from any analysis (and all information regarding that document deleted), you can click on the trashcan "delete" icon next to the document name. This will permanently delete the document, and all associated data.
+                    </div>
+                    <div class="intro_subheader">Contact</div>
+                    <div class="intro_paragraph">
+                        Found a bug, have a question, or find InkSync useful? You can contact us at plaban {at} salesforce.com.<br /><br />
+                        We are planning an open-source release of the InkSync code in the near future. However, if you'd like earlier access for research purposes, please contact us.
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+        {% if active_doc %}
+        <div id="column_right">
+            <div id="col_right_header" class="header">
+                <span class="material-icons">settings</span>
+                Settings
+            </div>
+            <div id="doc_stats_row" class="subheader">
+                <!-- Use the icon for a chart -->
+                <span class="material-icons">bar_chart</span>
+                <span id="doc_num_words"></span> words &mdash;
+                <span id="doc_num_chars"></span> chars
+            </div>
+            <div id="edit_view_mode_row" class="subheader review_mode_hidden">
+                <span class="material-icons">rate_review</span>
+                View <span id="view_type"></span>
+                <div class="checkbox checkbox_view">
+                    <label class="switch" for="checkbox">
+                        <input type="checkbox" id="checkbox_view" /> 
+                        <div class="slider round" onclick="swap_view_mode();"></div>
+                    </label>
+                </div>
+            </div>
+            <div id="marker_container" class="review_mode_hidden">
+                <div class="subheader">
+                    <span id="marker_all_visibility" class="material-icons marker_visibility" onclick="change_marker_visibility('all');">visibility</span>
+                    Markers
+                    <div class="checkbox checkbox_markers">
+                        <label class="switch" for="checkbox">
+                            <input type="checkbox" id="checkbox_markers" /> 
+                            <div class="slider round" onclick="marker_enable_disable();"></div>
+                        </label>
+                    </div>
+                </div>
+                <div id="marker_list"></div>
+                <div id='marker_add' class='marker_item' onclick="open_new_marker();">
+                    <span class='material-icons'>add</span>
+                    <span class='marker_name'>Add Marker</span>
+                </div>
+            </div>
+            <div id="review_menu" class="review_mode_visible">
+                <div id="col_right_header" class="header">
+                    <span class="material-icons">rate_review</span>
+                    Accepted Suggestions
+                </div>
+                <div id="review_sug_list"></div>
+            </div>
+            <div id="tabs_container">
+                <div class="subheader">
+                    <div id="chat_tab" class="tab review_mode_hidden" onclick="change_tab('chat')">
+                        <span class="material-icons">chat</span> Chat
+                    </div>
+                    <div id="comment_tab" class="tab review_mode_hidden" onclick="change_tab('comment')">
+                        <span class="material-icons">rate_review</span>
+                        Comment
+                    </div>
+                    <div id="verify_tab" class="tab" onclick="change_tab('verify')">
+                        <span class="material-icons">policy</span>
+                        Verify
+                    </div>
+                </div>
+                <div class="tab_chat_content tab_content">
+                    <div id="chat_messages"></div>
+                    <div class="msg_send_container">
+                        <form onsubmit="send_chat(); return false;">
+                            <input type="text" class="chat_input" placeholder="Send a message">
+                            <button type="submit" class="chat_send_btn">
+                                <span class="material-icons chat_send_icon">send</span>
+                                <svg class="spinner chat_spinner" width="24px" height="24px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab_comment_content tab_content">
+                    <div id="comment_explainer">
+                        Click on an existing comment, or add a new one by highlighting text and clicking the <span class="material-icons">rate_review</span> icon.
+                    </div>
+                    <div id="comment_chat_content"></div>
+                    <div class="msg_send_container" id="comment_send_container">
+                        <form onsubmit="send_chat(); return false;">
+                            <input type="text" class="chat_input" placeholder="Send a message">
+                            <button type="submit" class="chat_send_btn">
+                                <span class="material-icons chat_send_icon">send</span>
+                                <svg class="spinner chat_spinner" width="24px" height="24px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab_verify_content tab_content">
+                    <div id="verify_explainer">
+                        <div class="review_mode_hidden">
+                            When an edit introduces new information, click on the <span class="material-icons">policy</span> icon to verify the information.
+                            The 
+                        </div>
+                        <div class="review_mode_visible">
+                            You are auditing a document that includes LLM-generated text, tagged as either:
+                            
+                            <div class="legend_row">&bullet; With <span class="severity_1">unverified new information</span></div>
+                            <div class="legend_row">&bullet; With <span class="severity_0">no new information</span></div>
+                            
+                            Verify edits, and mark them as:
+
+                            <div class="legend_row">&bullet; <span class="severity_verified">Verified</span> (information is correct)</div>
+                            <div class="legend_row">&bullet; <span class="severity_incorrect">Incorrect</span> (information is inaccurate)</div>
+                            <div class="legend_row">&bullet; <span class="severity_not_sure">Not Sure</span> (verification did not provide enough information)</div>
+
+                        </div>
+                    </div>
+                    <div id="verify_loading">
+                        <svg id="verify_spinner" class="spinner" width="36px" height="36px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                    <div id="verify_content"></div>
+                    <div id="verify_buttons"></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/highlighter.js"></script>
+        <script src="/js/difflib.js"></script>        
+        <script>
+            var api_server = "/";
+            var start_document = {{active_doc|safe}};
+            var active_doc_id = start_document.id;
+            
+            window.onload = function() {
+                document.getElementById('main_container').addEventListener('input', handle_editor_change);
+                document.getElementById('main_container').addEventListener('keydown', intercept_shortcut_keys);
+                document.getElementById('main_container').addEventListener('keyup', save_cursor); // This is specific to if the user uses arrows, home, end, etc.
+                document.getElementById('main_container').addEventListener('click', save_cursor);
+                document.getElementById('main_container').addEventListener('blur', function() {
+                    save_document_state();
+                    onblur_brainstorm();
+                });
+                function intercept_shortcut_keys(e) {
+                    if (e.keyCode === 221 || e.keyCode === 219) { // [ or ]
+                        var should_prevent_default = shortcut_bracket_check(e.keyCode);
+                        if(should_prevent_default) {
+                            e.preventDefault(); // Prevent the default behavior
+                        }
+                    }
+                }
+                $('#main_container').on('paste', function(e) {
+                    e.preventDefault();
+                    const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                    document.execCommand('insertText', false, text); // Insert the plain text into the contenteditable area
+                });
+                build_marker_menu(); // Worth doing first because it builds marker_map
+                change_view_type();
+
+                if(start_document.view_mode == "Inline") {
+                    change_view_to("Inline", true);
+                }
+
+                change_markers_to(start_document.markers_disabled, true);
+                
+                reload_view();
+                change_tab(($("body").hasClass("no_chat"))?"comment":"chat");
+                if(window.location.href.indexOf("/review") > -1) {start_review();}
+            };
+        </script>
+        <script src="/js/editor.js"></script>
+        <script src="/js/suggestions.js"></script>
+        <script src="/js/conv.js"></script>
+        <script src="/js/markers.js"></script>
+        <script src="/js/brainstorm.js"></script>
+        <script src="/js/review.js"></script>
+        <script src="/js/verify.js"></script>
+        <script src="/js/shortcuts.js"></script>
+    </body>
+</html>

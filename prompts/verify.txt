@@ -1,0 +1,30 @@
+Document:
+```
+[DOCUMENT]
+```
+=============================================================
+You are given a text edit, replacing `original_text` with `replace_text` which introduces one or more new information elements. You should output a list of Google search queries that can help verify each of the new information elements in the edit. See the example below to understand the format, then complete the task defined below.
+
+Example 1:
+Example Document:
+The United Kingdom (UK) is a sovereign country in western Europe. It is a constitutional monarchy that is made up of four separate countries: England, Wales, Scotland and Northern Ireland, and the UK has a population of 66 million people.
+Example Edit 1:
+{"original_text": "has a population of 66 million", "replace_text": "has a population of 66 million people, which is roughly 20% of the US's 332 million."}
+Example Output 1:
+{"queries": ["Does the US have a population of 332 million?", "What is 66 million / 332 million?"]}
+
+Example 2:
+Example Document:
+Malaysia is a Southeast Asian country occupying parts of the Malay Peninsula and the island of Borneo. It's known for its beaches, rainforests and mix of Malay, Chinese, Indian and European cultural influences. You should plan a vacation that will linger in your memories indefinitely.
+Example Edit 2:
+{"original_text": "vacation that will linger in your memories indefinitely.", "replace_text": "vacation that will linger in your memories indefinitely. For instance, immerse yourself in the marine life of Redang Island as you go snorkeling with dolphins. Discover Penang's lively art scene by exploring the unique galleries and studios. Delight your palate with a cooking class in Kuala Lumpur, where you'll learn to prepare Nyonya-style Pho."}
+Example Output 2:
+{"queries": ["Is Redang Island in Malaysia?", "Can you snorkel with dolphins in Redang Island?", "Is Penang in Malaysia?", "Does Penang, Malaysia have a lively art scene?", "Is Kuala Lumpur in Malaysia?", "Is Nyonya-style Pho a Malaysian dish?"]}
+=============================================================
+For the real document given above and the edit below, complete the task by generating a list of Google search queries:
+
+Edit:
+```[SUGGESTION]```
+
+Output format:
+- Your output should be a JSON list of strings, where each string is a Google search query that can help verify the new information element(s) in the edit.

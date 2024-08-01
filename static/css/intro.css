@@ -1,0 +1,21 @@
+#introduction_message {
+    margin-top: 100px;
+    margin-left: 100px;
+    margin-bottom: 100px;
+    max-width: 800px;
+}
+.intro_paragraph {
+    font-size: 20px;
+    padding: 10px 0px;
+}
+.intro_subheader {
+    font-size: 30px;
+}
+#intro_header {
+    font-size: 40px;
+    font-weight: bold;
+    color: #000000;
+}
+#intro_youtube {
+    padding: 20px 0px;
+}
